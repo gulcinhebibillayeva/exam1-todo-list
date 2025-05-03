@@ -24,7 +24,7 @@ public:
     string getPriority() const { return _priority; }
     string getDate() const { return _date; }
     string getTime() const { return _time; }
-    bool getCompleted()const { _completed; }
+    bool getCompleted()const {return _completed; }
    
     void settaskName(const string& taskName) { _taskName = taskName; }
     void setDescription(const string& description) { _description = description; }
@@ -107,7 +107,7 @@ public:
                     {"description", getDescription()},
                     {"date", getDate()},
                     {"time", getTime()},
-                    {"completed",  false}
+                    {"completed", getCompleted()}
                 };
 
                 if (!user.contains("tasks")) {
@@ -129,4 +129,47 @@ public:
         outFile << users.dump(4);
         outFile.close();
     }
+
+
+    void showTasks(const string& username) {
+        ifstream inFile("users.json");
+        if (!inFile.is_open()) {
+            throw runtime_error("users.json açıla bilmədi!");
+        }
+
+        json users;
+        inFile >> users;
+        inFile.close();
+
+        bool userFound = false;
+        for (auto& user : users) {
+            if (user["username"] == username) {
+                userFound = true;
+
+                cout << "User Tasks:\n";
+                for (auto& task : user["tasks"]) {
+                    cout << "Task name: " << task["taskName"] << endl;
+                    cout << "Priorityt: " << task["priority"] << endl;
+                    cout << "description: " << task["description"] << endl;
+                    cout << "Date: " << task["date"] << endl;
+                    cout << "time: " << task["time"] << endl;
+                    if (task.contains("completed") && task["completed"].is_boolean()) {
+                        cout << "completed: " << (task["completed"] ? "Bəli" : "Xeyr") << endl;
+                    }
+                    else {
+                        cout << "Completed: Məlumat yoxdur" << endl;
+                    }
+                    cout << "----------------------------\n";
+                }
+                break;
+            }
+        }
+
+        if (!userFound) {
+            throw runtime_error("User could not found!");
+        }
+    }
+
+
+
 };

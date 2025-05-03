@@ -60,8 +60,20 @@ void OpenMainMenu(const string& currentUsername) {
 				
 			}
 			else if (choice == 2) {
+				Task task;
+				try {
+					task.showTasks(currentUsername);
+				}
+				catch (const exception& e) {
+					SetColor(RED);
+					cout << "Xəta: " << e.what() << endl;
+				}
+				SetColor(WHITE);
+				system("pause");
 				
 			}
 		}
 	}
+
+
 }
