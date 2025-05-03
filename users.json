@@ -1,34 +1,39 @@
 [
     {
-        "password": "123456",
-        "username": "gulcin"
+        "password": "gulcin12",
+        "username": "gulcinhebibillayeva"
     },
     {
-        "password": "hebibillayeva",
-        "username": "Gulcin"
-    },
-    {
-        "password": "jkjk",
-        "username": "gul"
-    },
-    {
-        "password": "lkl",
-        "username": "hjk"
-    },
-    {
-        "password": "nnfnnf",
-        "username": "gjfjldkf"
-    },
-    {
-        "password": "jdksj",
-        "username": "jkdsdk"
-    },
-    {
-        "password": "jflskls",
-        "username": "hdfsjksjkdjfk"
-    },
-    {
-        "password": "dhsjlks",
-        "username": "gl"
+        "password": "gulcin12",
+        "tasks": [
+            {
+                "description": "kdksjdksjd",
+                "title": "hsjdksjd"
+            },
+            {
+                "date": "12.05.2025",
+                "description": "todolist",
+                "priority": "1",
+                "time": "13:30",
+                "title": "exam"
+            },
+            {
+                "completed": false,
+                "date": "12.06.2025",
+                "description": "sdjksjdlskks",
+                "priority": "1",
+                "time": "13:30",
+                "title": "jdskjdkjd"
+            },
+            {
+                "completed": false,
+                "date": "kdlk",
+                "description": "sdlskdl",
+                "priority": "jkj",
+                "taskName": "exam",
+                "time": "jkdjl"
+            }
+        ],
+        "username": "gulcinhebibi12"
     }
 ]
