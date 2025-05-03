@@ -170,6 +170,86 @@ public:
         }
     }
 
+    void updateTask(const string& username) {
+        ifstream inFile("users.json");
+        if (!inFile.is_open()) {
+            throw runtime_error("users.json açıla bilmədi!");
+        }
 
+        json users;
+        inFile >> users;
+        inFile.close();
+
+        bool userFound = false;
+        for (auto& user : users) {
+            if (user["username"] == username) {
+                userFound = true;
+
+                if (!user.contains("tasks") || user["tasks"].empty()) {
+                    cout << "There is no any task.\n";
+                    return;
+                }
+
+                cout << "Tasks:\n";
+                for (size_t i = 0; i < user["tasks"].size(); ++i) {
+                    cout << i + 1 << ". " << user["tasks"][i]["taskName"] << endl;
+                }
+
+                size_t index;
+                cout << "Enter number of task you want to update: ";
+                cin >> index;
+                if (index < 1 || index > user["tasks"].size()) {
+                    cout << "wrong choice.\n";
+                    return;
+                }
+
+                json& task = user["tasks"][index - 1];
+                cin.ignore();
+
+                string taskName, priority, description, date, time;
+                char completedChar;
+                bool completed;
+
+                cout << "new task name (" << task["taskName"] << "): ";
+                getline(cin, taskName);
+                cout << "newprioritet prioritet (" << task["priority"] << "): ";
+                getline(cin, priority);
+                cout << "new description (" << task["description"] << "): ";
+                getline(cin, description);
+                cout << "new Date(" << task["date"] << "): ";
+                getline(cin, date);
+                cout << "new Time (" << task["time"] << "): ";
+                getline(cin, time);
+                cout << "completd or not (Y/N): ";
+                cin >> completedChar;
+                completed = (completedChar == 'Y' || completedChar == 'y');
+
+               
+                if (!taskName.empty()) task["taskName"] = taskName;
+                if (!priority.empty()) task["priority"] = priority;
+                if (!description.empty()) task["description"] = description;
+                if (!date.empty()) task["date"] = date;
+                if (!time.empty()) task["time"] = time;
+                task["completed"] = completed;
+
+                break;
+            }
+        }
+
+        if (!userFound) {
+            throw runtime_error("İstifadəçi tapılmadı!");
+        }
+
+        ofstream outFile("users.json");
+        if (!outFile.is_open()) {
+            throw runtime_error("users.json yazıla bilmədi!");
+        }
+
+        outFile << users.dump(4);
+        outFile.close();
+        PlaySound(TEXT("applause-alks-ses-efekti-125030.wav"), NULL, SND_FILENAME | SND_ASYNC);
+
+        cout << "Task updated!\n";
+    }
 
 };

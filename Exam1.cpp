@@ -13,6 +13,7 @@ using json = nlohmann::json;
 #pragma comment(lib, "winmm.lib")
 using namespace std;
 
+
 void SetColor(int color) {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }

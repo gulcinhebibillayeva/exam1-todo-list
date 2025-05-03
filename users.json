@@ -7,13 +7,19 @@
         "password": "gulcin12",
         "tasks": [
             {
-                "description": "kdksjdksjd",
+                "completed": false,
+                "date": "13.06.2025",
+                "description": "mutleq hazirlas",
+                "priority": "2",
+                "taskName": "exam",
+                "time": "13:30",
                 "title": "hsjdksjd"
             },
             {
                 "date": "12.05.2025",
                 "description": "todolist",
                 "priority": "1",
+                "taskName": null,
                 "time": "13:30",
                 "title": "exam"
             },
@@ -22,16 +28,17 @@
                 "date": "12.06.2025",
                 "description": "sdjksjdlskks",
                 "priority": "1",
+                "taskName": null,
                 "time": "13:30",
                 "title": "jdskjdkjd"
             },
             {
                 "completed": false,
-                "date": "kdlk",
-                "description": "sdlskdl",
-                "priority": "jkj",
-                "taskName": "exam",
-                "time": "jkdjl"
+                "date": "13.06.2025",
+                "description": "jsjasaks",
+                "priority": "2",
+                "taskName": "task",
+                "time": "13:15"
             },
             {
                 "completed": false,

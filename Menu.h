@@ -1,7 +1,7 @@
 ﻿#pragma once
+
 void OpenMainMenu(const string& currentUsername) {
 	int choice = 0;
-
 	while (true) {
 		system("cls");
 
@@ -57,7 +57,16 @@ void OpenMainMenu(const string& currentUsername) {
 				system("pause");
 			}
 			else if (choice == 1) {
-				
+				Task task;
+				try {
+					task.updateTask(currentUsername);
+				}
+				catch (const exception& e) {
+					SetColor(RED);
+					cout << "Xəta: " << e.what() << endl;
+				}
+				SetColor(WHITE);
+				system("pause");
 			}
 			else if (choice == 2) {
 				Task task;
