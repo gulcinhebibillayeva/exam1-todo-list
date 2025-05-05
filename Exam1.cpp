@@ -12,6 +12,8 @@
 #include <ctime>
 #include<string>
 #include<vector>
+#include <regex>
+#include <limits>
 
 using json = nlohmann::json;
 #pragma comment(lib, "winmm.lib")

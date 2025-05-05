@@ -1,5 +1,6 @@
 ﻿// Task.h
 #pragma once
+#include <limits>
 #include <string>
 using namespace std;
 class Task {
@@ -102,7 +103,6 @@ public:
         } while (true);
 
         json newTask;
-        newTask["id"] = "T" + to_string(rand() % 100000);
         newTask["name"] = name;
         newTask["description"] = description;
         newTask["priority"] = priority;
@@ -137,7 +137,7 @@ public:
     void updateTask(const string& username) {
         ifstream inFile("users.json");
         if (!inFile.is_open()) {
-            throw runtime_error("users.json could not opened!");
+            throw runtime_error("users.json could not be opened!");
         }
 
         json users;
@@ -150,7 +150,7 @@ public:
                 userFound = true;
 
                 if (!user.contains("tasks") || user["tasks"].empty()) {
-                    cout << "There is no any task.\n";
+                    cout << "There is no task.\n";
                     return;
                 }
 
@@ -162,32 +162,75 @@ public:
                 size_t index;
                 cout << "Enter number of task you want to update: ";
                 cin >> index;
+
+                // ENTER axınını udmaq üçün boş getline
+                string dummy;
+                getline(cin, dummy);
+
                 if (index < 1 || index > user["tasks"].size()) {
-                    cout << "wrong choice.\n";
+                    cout << "Wrong choice.\n";
                     return;
                 }
 
                 json& task = user["tasks"][index - 1];
-                cin.ignore();
 
                 string taskName, priority, description, date, time;
                 char completedChar;
                 bool completed;
 
-                cout << "new task name (" << task["taskName"] << "): ";
+                cout << "New task name (" << task["taskName"] << "): ";
                 getline(cin, taskName);
-                cout << "newprioritet prioritet (" << task["priority"] << "): ";
-                getline(cin, priority);
-                cout << "new description (" << task["description"] << "): ";
-                getline(cin, description);
-                cout << "new Date(" << task["date"] << "): ";
-                getline(cin, date);
-                cout << "new Time (" << task["time"] << "): ";
-                getline(cin, time);
-                cout << "completd or not (Y/N): ";
-                cin >> completedChar;
-                completed = (completedChar == 'Y' || completedChar == 'y');
+                if (!taskName.empty() && taskName.length() > 100) {
+                    cout << "Task name must be up to 100 characters.\n";
+                    return;
+                }
 
+                while (true) {
+                    cout << "New priority [low, medium, high] (" << task["priority"] << "): ";
+                    getline(cin, priority);
+                    if (priority.empty() || priority == "low" || priority == "medium" || priority == "high") {
+                        break;
+                    }
+                    cout << "Invalid priority. Please enter low, medium, or high.\n";
+                }
+
+                cout << "New description (" << task["description"] << "): ";
+                getline(cin, description);
+
+                while (true) {
+                    cout << "New date [DD.MM.YYYY] (" << task["date"] << "): ";
+                    getline(cin, date);
+                    if (date.empty()) break;
+                    regex dateRegex(R"(\d{2}\.\d{2}\.\d{4})");
+                    if (regex_match(date, dateRegex)) break;
+                    cout << "Invalid date format. Must be DD.MM.YYYY.\n";
+                }
+
+                while (true) {
+                    cout << "New time [HH:MM] (" << task["time"] << "): ";
+                    getline(cin, time);
+                    if (time.empty()) break;
+                    regex timeRegex(R"(^([01]\d|2[0-3]):([0-5]\d)$)");
+                    if (regex_match(time, timeRegex)) break;
+                    cout << "Invalid time format. Must be HH:MM in 24h format.\n";
+                }
+
+                while (true) {
+                    cout << "Completed? (Y/N): ";
+                    string input;
+                    getline(cin, input);
+                    if (input == "Y" || input == "y") {
+                        completed = true;
+                        break;
+                    }
+                    else if (input == "N" || input == "n") {
+                        completed = false;
+                        break;
+                    }
+                    else {
+                        cout << "Please enter Y or N.\n";
+                    }
+                }
 
                 if (!taskName.empty()) task["taskName"] = taskName;
                 if (!priority.empty()) task["priority"] = priority;
@@ -211,16 +254,17 @@ public:
 
         outFile << users.dump(4);
         outFile.close();
-        PlaySound(TEXT("applause-alks-ses-efekti-125030.wav"), NULL, SND_FILENAME | SND_ASYNC);
 
+        PlaySound(TEXT("applause-alks-ses-efekti-125030.wav"), NULL, SND_FILENAME | SND_ASYNC);
         cout << "Task updated!\n";
     }
+
 
 
     void deleteTask(const string& username) {
         ifstream inFile("users.json");
         if (!inFile.is_open()) {
-            throw runtime_error("users.json açıla bilmədi!");
+            throw runtime_error("users.json could not be opened!");
         }
 
         json users;
@@ -228,51 +272,62 @@ public:
         inFile.close();
 
         bool userFound = false;
-
         for (auto& user : users) {
             if (user["username"] == username) {
                 userFound = true;
 
                 if (!user.contains("tasks") || user["tasks"].empty()) {
-                    cout << "There is no any task!" << endl;
+                    cout << "There are no tasks to delete.\n";
                     return;
                 }
 
                 cout << "Tasks:\n";
-                int index = 0;
-                for (const auto& task : user["tasks"]) {
-                    cout << index + 1 << ". " << task["taskName"] << endl;
-                    index++;
+                for (size_t i = 0; i < user["tasks"].size(); ++i) {
+                    cout << i + 1 << ". " << user["tasks"][i]["taskName"] << endl;
                 }
 
-                cout << "Enter number of task: ";
-                int delIndex;
-                cin >> delIndex;
+                size_t index = 0;
+                while (true) {
+                    cout << "Enter number of the task you want to delete but if you want to cancel enter 0: ";
+                    string input;
+                    getline(cin, input);
 
-                if (delIndex < 1 || delIndex > user["tasks"].size()) {
-                    cout << "Wrong index!" << endl;
-                    return;
+                    try {
+                        index = stoi(input);
+                        if (index == 0) {
+                            cout << "Task deletion cancelled.\n";
+                            return;
+                        }
+                        if (index >= 1 && index <= user["tasks"].size()) {
+                            break;
+                        }
+                        else {
+                            cout << "Invalid number. Try again.\n";
+                        }
+                    }
+                    catch (...) {
+                        cout << "Please enter a valid number.\n";
+                    }
                 }
 
-                user["tasks"].erase(user["tasks"].begin() + (delIndex - 1));
-
-                ofstream outFile("users.json");
-                if (!outFile.is_open()) {
-                    throw runtime_error("users.json Failed to write!");
-                }
-
-                outFile << users.dump(4);
-                outFile.close();
-
-                cout << "Task deleted succesfully!" << endl;
-                PlaySound(TEXT("delete-success.wav"), NULL, SND_FILENAME | SND_ASYNC);
-                return;
+                string deletedTask = user["tasks"][index - 1]["taskName"];
+                user["tasks"].erase(user["tasks"].begin() + (index - 1));
+                cout << "Task \"" << deletedTask << "\" deleted successfully.\n";
+                break;
             }
         }
 
         if (!userFound) {
-            throw runtime_error("could not found user!");
+            throw runtime_error("User not found!");
         }
+
+        ofstream outFile("users.json");
+        if (!outFile.is_open()) {
+            throw runtime_error("users.json Could not be written!");
+        }
+
+        outFile << users.dump(4);
+        outFile.close();
     }
 
     void searchTasks(const string& username) {

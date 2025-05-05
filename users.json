@@ -8,22 +8,6 @@
         "tasks": [
             {
                 "completed": false,
-                "date": "jdks",
-                "description": "jdksd",
-                "priority": "jsdkd",
-                "taskName": "dkksdj",
-                "time": "dls"
-            },
-            {
-                "completed": false,
-                "date": "12.07.2025",
-                "description": "hjkkl",
-                "priority": "1",
-                "taskName": "ijk",
-                "time": "13:30"
-            },
-            {
-                "completed": false,
                 "date": "jskssd",
                 "description": "kvvl jklkcl jkdlskdsld",
                 "priority": "low",
@@ -37,7 +21,17 @@
                 "description": "hdjkjkjdksdkcdjcndcjjhdjvbhjdfhvbjdhbvjhdbfvbhdfhvdfdjfhvbjdbhfvjdbhvjdhbvjdbhfvjdhfvjbhdjfvbhjdfhvbj",
                 "id": "T41",
                 "name": "",
-                "priority": "Low"
+                "priority": "Low",
+                "taskName": null
+            },
+            {
+                "clock": "13:30",
+                "completed": false,
+                "date": "12.06.2025",
+                "description": "hhferifeor",
+                "name": "",
+                "priority": "Low",
+                "taskName": null
             }
         ],
         "username": "gulcinhebibi12"

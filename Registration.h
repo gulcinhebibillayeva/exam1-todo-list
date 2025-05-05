@@ -165,7 +165,7 @@ void registrationMenu() {
         }
         else {
             SetColor(WHITE);
-            cout << "Giriş (Sign In)" << endl;
+            cout << "Giris (Sign In)" << endl;
         }
 
         SetColor(WHITE);
