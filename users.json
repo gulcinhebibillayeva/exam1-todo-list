@@ -8,45 +8,36 @@
         "tasks": [
             {
                 "completed": false,
-                "date": "13.06.2025",
-                "description": "mutleq hazirlas",
-                "priority": "2",
-                "taskName": "exam",
-                "time": "13:30",
-                "title": "hsjdksjd"
+                "date": "jdks",
+                "description": "jdksd",
+                "priority": "jsdkd",
+                "taskName": "dkksdj",
+                "time": "dls"
             },
             {
-                "date": "12.05.2025",
-                "description": "todolist",
+                "completed": false,
+                "date": "12.07.2025",
+                "description": "hjkkl",
                 "priority": "1",
-                "taskName": null,
-                "time": "13:30",
-                "title": "exam"
+                "taskName": "ijk",
+                "time": "13:30"
             },
             {
                 "completed": false,
-                "date": "12.06.2025",
-                "description": "sdjksjdlskks",
-                "priority": "1",
-                "taskName": null,
-                "time": "13:30",
-                "title": "jdskjdkjd"
+                "date": "jskssd",
+                "description": "kvvl jklkcl jkdlskdsld",
+                "priority": "low",
+                "taskName": "hdhksdj",
+                "time": "hdcks"
             },
             {
+                "clock": "13:30",
                 "completed": false,
-                "date": "13.06.2025",
-                "description": "jsjasaks",
-                "priority": "2",
-                "taskName": "task",
-                "time": "13:15"
-            },
-            {
-                "completed": false,
-                "date": "jdkjsd",
-                "description": "jksdl",
-                "priority": "jdkjsd",
-                "taskName": "shdjsd",
-                "time": "jdksd"
+                "date": "2026-05-24",
+                "description": "hdjkjkjdksdkcdjcndcjjhdjvbhjdfhvbjdhbvjhdbfvbhdfhvdfdjfhvbjdbhfvjdbhvjdhbvjdbhfvjdhfvjbhdjfvbhjdfhvbj",
+                "id": "T41",
+                "name": "",
+                "priority": "Low"
             }
         ],
         "username": "gulcinhebibi12"

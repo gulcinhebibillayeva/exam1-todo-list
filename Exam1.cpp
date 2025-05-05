@@ -7,7 +7,11 @@
 #include <mmsystem.h>
 #include <thread>
 #include <chrono>
+#include <sstream>
+#include <iomanip>
+#include <ctime>
 #include<string>
+#include<vector>
 
 using json = nlohmann::json;
 #pragma comment(lib, "winmm.lib")

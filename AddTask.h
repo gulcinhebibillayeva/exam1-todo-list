@@ -12,20 +12,20 @@ private:
     bool _completed;
 
 public:
-    Task(const string& taskName, const string& description, const string& priority, const string& date, const string& time,bool completed)
-        : _taskName(taskName), _description(description), _priority(priority), _date(date), _time(time),_completed(completed) {
+    Task(const string& taskName, const string& description, const string& priority, const string& date, const string& time, bool completed)
+        : _taskName(taskName), _description(description), _priority(priority), _date(date), _time(time), _completed(completed) {
     }
 
     Task() = default;
 
-   
+
     string gettaskName() const { return _taskName; }
     string getDescription() const { return _description; }
     string getPriority() const { return _priority; }
     string getDate() const { return _date; }
     string getTime() const { return _time; }
-    bool getCompleted()const {return _completed; }
-   
+    bool getCompleted()const { return _completed; }
+
     void settaskName(const string& taskName) { _taskName = taskName; }
     void setDescription(const string& description) { _description = description; }
     void setPriority(const string& priority) { _priority = priority; }
@@ -45,135 +45,99 @@ public:
         };
     }
 
-
-    void addTask(const string& username) {
+    void addTask(const string& currentUsername) {
+        vector<json> usersData;
         ifstream inFile("users.json");
-        if (!inFile.is_open()) {
-            throw runtime_error("users.json acilmadi");
+        if (inFile) {
+            json j;
+            inFile >> j;
+            usersData = j.get<vector<json>>();
+            inFile.close();
+        }
+        string name, description, priority, date, time;
+
+        cout << "Task name(max 100 simvol): ";
+        getline(cin, name);
+        if (name.length() > 100) {
+            cout << " Name is soo long .\n";
+            return;
         }
 
-        json users;
-        inFile >> users;
-        inFile.close();
+        cout << "Enter description: ";
+        getline(cin, description);
+        do {
+            cout << "Prioritet (Low/Medium/High): ";
+            getline(cin, priority);
+            if (priority != "Low" && priority != "Medium" && priority != "High") {
+                cout << "Wrong input. try again.\n";
+            }
+        } while (priority != "Low" && priority != "Medium" && priority != "High");
+
+        do {
+            cout << "Tarix (DD.MM.YYYY): ";
+            getline(cin, date);
+            tm tm{};
+            istringstream ss(date);
+            ss >> get_time(&tm, "%d.%m.%Y");
+            if (ss.fail()) {
+                cout << "time format is wrong. Düzgün format: DD.MM.YYYY (ex: 05.05.2025)\n";
+            }
+            else {
+                break;
+            }
+        } while (true);
+
+        do {
+            cout << "Clock (HH:MM): ";
+            getline(cin, time);
+            tm tm{};
+            istringstream ss(time);
+            ss >> get_time(&tm, "%H:%M");
+            if (ss.fail()) {
+                cout << "Formate is not true.Try again\n";
+            }
+            else {
+                break;
+            }
+        } while (true);
+
+        json newTask;
+        newTask["id"] = "T" + to_string(rand() % 100000);
+        newTask["name"] = name;
+        newTask["description"] = description;
+        newTask["priority"] = priority;
+        newTask["date"] = date;
+        newTask["clock"] = time;
+        newTask["completed"] = false;
 
         bool userFound = false;
-        for (auto& user : users) {
-            if (user["username"] == username) {
-                userFound = true;
-
-               
-                string taskName, priority, description, date, time;
-
-                cout << "Task Name: ";
-                cin.ignore();
-                getline(cin, taskName);
-
-                cout << "Prioritet (Low/Medium/High): ";
-                getline(cin, priority);
-
-                cout << "Description: ";
-                getline(cin, description);
-
-                cout << "Time (YYYY-MM-DD): ";
-                getline(cin, date);
-
-                cout << "clock (HH:MM): ";
-                getline(cin, time);
-                cout << "completed?";
-                char completedChar;
-                bool completed;
-
-                cout << "completed? (Y/N): ";
-                cin >> completedChar;
-
-                if (completedChar == 'Y' || completedChar == 'y') {
-                    completed = true;
-                }
-                else {
-                    completed = false;
-                }
-
-                settaskName(taskName);
-                setPriority(priority);
-                setDescription(description);
-                setDate(date);
-                setTime(time);
-                setCompleted(completed);
-
-              
-                json newTask = {
-                    {"taskName", gettaskName()},
-                    {"priority", getPriority()},
-                    {"description", getDescription()},
-                    {"date", getDate()},
-                    {"time", getTime()},
-                    {"completed", getCompleted()}
-                };
-
-                if (!user.contains("tasks")) {
-                    user["tasks"] = json::array();
-                }
-
+        for (auto& user : usersData) {
+            if (user["username"] == currentUsername) {
                 user["tasks"].push_back(newTask);
-                break;
-            }
-        }
-
-        if (!userFound) {
-            throw runtime_error("user cannot found!");
-        }
-        ofstream outFile("users.json");
-        if (!outFile.is_open()) {
-            throw runtime_error("users.json cannot opened!");
-        }
-        outFile << users.dump(4);
-        outFile.close();
-    }
-
-
-    void showTasks(const string& username) {
-        ifstream inFile("users.json");
-        if (!inFile.is_open()) {
-            throw runtime_error("users.json açıla bilmədi!");
-        }
-
-        json users;
-        inFile >> users;
-        inFile.close();
-
-        bool userFound = false;
-        for (auto& user : users) {
-            if (user["username"] == username) {
                 userFound = true;
-
-                cout << "User Tasks:\n";
-                for (auto& task : user["tasks"]) {
-                    cout << "Task name: " << task["taskName"] << endl;
-                    cout << "Priorityt: " << task["priority"] << endl;
-                    cout << "description: " << task["description"] << endl;
-                    cout << "Date: " << task["date"] << endl;
-                    cout << "time: " << task["time"] << endl;
-                    if (task.contains("completed") && task["completed"].is_boolean()) {
-                        cout << "completed: " << (task["completed"] ? "Bəli" : "Xeyr") << endl;
-                    }
-                    else {
-                        cout << "Completed: Məlumat yoxdur" << endl;
-                    }
-                    cout << "----------------------------\n";
-                }
                 break;
             }
         }
 
         if (!userFound) {
-            throw runtime_error("User could not found!");
+            json newUser;
+            newUser["username"] = currentUsername;
+            newUser["tasks"] = json::array({ newTask });
+            usersData.push_back(newUser);
         }
+
+
+        ofstream outFile("users.json");
+        outFile << setw(4) << usersData << endl;
+        outFile.close();
+
+        cout << "Task is added successfully!\n";
     }
 
     void updateTask(const string& username) {
         ifstream inFile("users.json");
         if (!inFile.is_open()) {
-            throw runtime_error("users.json açıla bilmədi!");
+            throw runtime_error("users.json could not opened!");
         }
 
         json users;
@@ -224,7 +188,7 @@ public:
                 cin >> completedChar;
                 completed = (completedChar == 'Y' || completedChar == 'y');
 
-               
+
                 if (!taskName.empty()) task["taskName"] = taskName;
                 if (!priority.empty()) task["priority"] = priority;
                 if (!description.empty()) task["description"] = description;
@@ -252,4 +216,125 @@ public:
         cout << "Task updated!\n";
     }
 
+
+    void deleteTask(const string& username) {
+        ifstream inFile("users.json");
+        if (!inFile.is_open()) {
+            throw runtime_error("users.json açıla bilmədi!");
+        }
+
+        json users;
+        inFile >> users;
+        inFile.close();
+
+        bool userFound = false;
+
+        for (auto& user : users) {
+            if (user["username"] == username) {
+                userFound = true;
+
+                if (!user.contains("tasks") || user["tasks"].empty()) {
+                    cout << "There is no any task!" << endl;
+                    return;
+                }
+
+                cout << "Tasks:\n";
+                int index = 0;
+                for (const auto& task : user["tasks"]) {
+                    cout << index + 1 << ". " << task["taskName"] << endl;
+                    index++;
+                }
+
+                cout << "Enter number of task: ";
+                int delIndex;
+                cin >> delIndex;
+
+                if (delIndex < 1 || delIndex > user["tasks"].size()) {
+                    cout << "Wrong index!" << endl;
+                    return;
+                }
+
+                user["tasks"].erase(user["tasks"].begin() + (delIndex - 1));
+
+                ofstream outFile("users.json");
+                if (!outFile.is_open()) {
+                    throw runtime_error("users.json Failed to write!");
+                }
+
+                outFile << users.dump(4);
+                outFile.close();
+
+                cout << "Task deleted succesfully!" << endl;
+                PlaySound(TEXT("delete-success.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                return;
+            }
+        }
+
+        if (!userFound) {
+            throw runtime_error("could not found user!");
+        }
+    }
+
+    void searchTasks(const string& username) {
+        ifstream inFile("users.json");
+        if (!inFile.is_open()) {
+            throw runtime_error("users.json could not be opened!");
+        }
+
+        json users;
+        inFile >> users;
+        inFile.close();
+
+        string keyword;
+        cout << "Enter any word: ";
+        cin.ignore();
+        getline(cin, keyword);
+
+        bool userFound = false;
+        bool anyFound = false;
+
+        for (auto& user : users) {
+            if (user["username"] == username) {
+                userFound = true;
+
+                if (!user.contains("tasks") || user["tasks"].empty()) {
+                    cout << "There is no any task." << endl;
+                    return;
+                }
+
+                for (auto& task : user["tasks"]) {
+                    string name = task["taskName"];
+                    string priority = task["priority"];
+                    string desc = task["description"];
+                    string date = task["date"];
+                    string time = task["time"];
+
+                    if (
+                        name.find(keyword) != string::npos ||
+                        priority.find(keyword) != string::npos ||
+                        desc.find(keyword) != string::npos ||
+                        date.find(keyword) != string::npos ||
+                        time.find(keyword) != string::npos
+                        ) {
+                        cout << "Task name: " << name << endl;
+                        cout << "Prioritet: " << priority << endl;
+                        cout << "Description: " << desc << endl;
+                        cout << "Time: " << date << endl;
+                        cout << "Time: " << time << endl;
+                        cout << "Completed or not: " << (task["completed"] ? "Yes" : "No") << endl;
+                        cout << "------------------------" << endl;
+                        anyFound = true;
+                    }
+                }
+                break;
+            }
+        }
+
+        if (!userFound) {
+            throw runtime_error("Could not found user!");
+        }
+        if (!anyFound) {
+            cout << "There is no task!" << endl;
+        }
+    }
 };

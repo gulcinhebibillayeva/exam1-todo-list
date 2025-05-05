@@ -31,16 +31,46 @@ void OpenMainMenu(const string& currentUsername) {
 			SetColor(WHITE);
 			cout << "Show Tasks" << endl;
 		}
+		if (choice == 3) {
+			SetColor(GREEN);
+			cout << "Delete Task <<\n";
+		}
+		else {
+			SetColor(WHITE);
+			cout << "Delete Task\n";
+		}
+
+		if (choice == 4 ){
+			SetColor(GREEN);
+			cout << "Search Task <<\n";
+		}
+		else {
+			SetColor(WHITE);
+			cout << "Search Task\n";
+		}
+
+		if (choice == 5) {
+			SetColor(GREEN);
+			cout << "Filter by Time Range <<\n";
+		}
+		else {
+			SetColor(WHITE);
+			cout << "Filter by Time Range\n";
+		}
+
+
 
 		SetColor(WHITE);
 		int c = _getch();
 
 		if (c == key_up) {
-			choice = (choice > 0) ? choice - 1 : 2;
+			choice = (choice > 0) ? choice - 1 : 5;
 		}
 		else if (c == key_down) {
-			choice = (choice < 2) ? choice + 1 : 0;
+			choice = (choice < 5) ? choice + 1 : 0;
 		}
+
+
 		else if (c == key_enter) {
 			if (choice == 0) {
 				Task task;  
@@ -71,7 +101,7 @@ void OpenMainMenu(const string& currentUsername) {
 			else if (choice == 2) {
 				Task task;
 				try {
-					task.showTasks(currentUsername);
+					/*task.showTasks(currentUsername);*/
 				}
 				catch (const exception& e) {
 					SetColor(RED);
@@ -81,6 +111,46 @@ void OpenMainMenu(const string& currentUsername) {
 				system("pause");
 				
 			}
+			else if (choice == 3) {
+				Task task;
+				try {
+					task.deleteTask(currentUsername);
+				}
+				catch (const exception& e) {
+					SetColor(RED);
+					cout << "Xəta: " << e.what() << endl;
+				}
+				SetColor(WHITE);
+				system("pause");
+			}
+			else if (choice == 4) {
+				Task task;
+				try {
+					task.searchTasks(currentUsername);
+				}
+				catch (const exception& e) {
+					SetColor(RED);
+					cout << "Xəta: " << e.what() << endl;
+				}
+				SetColor(WHITE);
+				system("pause");
+			}
+
+			else if (choice == 5) {
+				Task task;
+				try {
+					/*task.getTimeDifference(currentUsername);*/
+				}
+				catch (const exception& e) {
+					SetColor(RED);
+					cout << "Xəta: " << e.what() << endl;
+				}
+				SetColor(WHITE);
+				system("pause");
+			}
+
+
+
 		}
 	}
 

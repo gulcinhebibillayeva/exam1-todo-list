@@ -16,7 +16,6 @@ string inputPassword() {
     return password;
 }
 
-// Parolun düzgünlüyünü yoxlayır (ən az 8 simvol, rəqəm və hərf daxilində)
 bool isValidPassword(const string& password) {
     if (password.length() < 8) return false;
     bool hasDigit = false, hasAlpha = false;
@@ -27,17 +26,17 @@ bool isValidPassword(const string& password) {
     return hasDigit && hasAlpha;
 }
 
-// Uğurlu əməliyyat səsi
+
 void playSuccessSound() {
     PlaySound(L"qeydiyyat.wav", NULL, SND_FILENAME | SND_ASYNC);
 }
 
-// Xəta səsi
+
 void playErrorSound() {
     PlaySound(L"C:\\Users\\YourUserName\\Desktop\\error.wav", NULL, SND_FILENAME);
 }
 
-// Yüklənmə effekti
+
 void LoadingEffect() {
     for (int i = 0; i < 3; i++) {
         cout << "Yuklenir";
@@ -49,7 +48,6 @@ void LoadingEffect() {
     system("cls");
 }
 
-// Qeydiyyat funksiyası
 void signUp() {
     system("cls");
     string username, password;
@@ -106,7 +104,7 @@ void signUp() {
     SetColor(WHITE);
 }
 
-// Giriş funksiyası
+
 void signIn() {
     string username, password;
     cout << "Enter username: ";
@@ -131,7 +129,7 @@ void signIn() {
             cout << "Login successful!" << endl;
             found = true;
             Sleep(1000);
-            OpenMainMenu(username); // username göndərilir
+            OpenMainMenu(username); 
             break;
         }
     }
@@ -145,7 +143,7 @@ void signIn() {
     }
 }
 
-// Qeydiyyat menyusu
+
 void registrationMenu() {
     int choice = 0;
 
@@ -154,31 +152,31 @@ void registrationMenu() {
 
         if (choice == 0) {
             SetColor(GREEN);
-            cout << ">> Qeydiyyat (Sign Up) <<" << endl;
+            cout << "Qeydiyyat (Sign Up) " << endl;
         }
         else {
             SetColor(WHITE);
-            cout << "   Qeydiyyat (Sign Up)" << endl;
+            cout << "Qeydiyyat (Sign Up)" << endl;
         }
 
         if (choice == 1) {
             SetColor(GREEN);
-            cout << ">> Giriş (Sign In) <<" << endl;
+            cout << "Giris (Sign In) " << endl;
         }
         else {
             SetColor(WHITE);
-            cout << "   Giriş (Sign In)" << endl;
+            cout << "Giriş (Sign In)" << endl;
         }
 
         SetColor(WHITE);
         int key = _getch();
-        if (key == 72) {  // ↑ yuxarı ox
+        if (key == 72) {  
             choice = (choice > 0) ? choice - 1 : 1;
         }
-        else if (key == 80) {  // ↓ aşağı ox
+        else if (key == 80) {  
             choice = (choice < 1) ? choice + 1 : 0;
         }
-        else if (key == 13) {  // ENTER
+        else if (key == 13) { 
             if (choice == 0) {
                 signUp();
                 system("pause");
