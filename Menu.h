@@ -101,7 +101,7 @@ void OpenMainMenu(const string& currentUsername) {
 			else if (choice == 2) {
 				Task task;
 				try {
-					/*task.showTasks(currentUsername);*/
+					task.showTasks(currentUsername);
 				}
 				catch (const exception& e) {
 					SetColor(RED);
@@ -139,7 +139,7 @@ void OpenMainMenu(const string& currentUsername) {
 			else if (choice == 5) {
 				Task task;
 				try {
-					/*task.getTimeDifference(currentUsername);*/
+					task.showTasksByTimeRange(currentUsername);
 				}
 				catch (const exception& e) {
 					SetColor(RED);

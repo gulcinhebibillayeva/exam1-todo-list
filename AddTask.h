@@ -1,4 +1,4 @@
-﻿// Task.h
+﻿
 #pragma once
 #include <limits>
 #include <string>
@@ -95,7 +95,7 @@ public:
             istringstream ss(time);
             ss >> get_time(&tm, "%H:%M");
             if (ss.fail()) {
-                cout << "Formate is not true.Try again\n";
+                cout << "Format is not true.Try again\n";
             }
             else {
                 break;
@@ -103,11 +103,11 @@ public:
         } while (true);
 
         json newTask;
-        newTask["name"] = name;
+        newTask["taskName"] = name;
         newTask["description"] = description;
         newTask["priority"] = priority;
         newTask["date"] = date;
-        newTask["clock"] = time;
+        newTask["time"] = time;
         newTask["completed"] = false;
 
         bool userFound = false;
@@ -162,8 +162,6 @@ public:
                 size_t index;
                 cout << "Enter number of task you want to update: ";
                 cin >> index;
-
-                // ENTER axınını udmaq üçün boş getline
                 string dummy;
                 getline(cin, dummy);
 
@@ -392,4 +390,55 @@ public:
             cout << "There is no task!" << endl;
         }
     }
+
+    void showTasks(const string& username) {
+        ifstream inFile("users.json");
+        if (!inFile.is_open()) {
+            throw runtime_error("Failed to open users.json!");
+        }
+
+        json users;
+        try {
+            inFile >> users;
+        }
+        catch (...) {
+            throw runtime_error("Invalid JSON format!");
+        }
+        inFile.close();
+
+        bool userFound = false;
+
+        for (const auto& user : users) {
+            if (user.contains("username") && user["username"] == username) {
+                userFound = true;
+
+                if (!user.contains("tasks") || !user["tasks"].is_array() || user["tasks"].empty()) {
+                    cout << "You don't have any tasks.\n";
+                    return;
+                }
+
+                cout << "Your tasks:\n";
+                int index = 1;
+                for (const auto& task : user["tasks"]) {
+                    cout << "Task #" << index++ << ":\n";
+                    cout << "  Name       : " << (task.contains("taskName") ? task["taskName"].get<string>() : "N/A") << endl;
+                    cout << "  Priority   : " << (task.contains("priority") ? task["priority"].get<string>() : "N/A") << endl;
+                    cout << "  Description: " << (task.contains("description") ? task["description"].get<string>() : "N/A") << endl;
+                    cout << "  Date       : " << (task.contains("date") ? task["date"].get<string>() : "N/A") << endl;
+                    cout << "  Time       : " << (task.contains("time") ? task["time"].get<string>() : "N/A") << endl;
+                    cout << "  Completed  : " << (task.contains("completed") && task["completed"].is_boolean() ? (task["completed"].get<bool>() ? "Yes" : "No") : "N/A") << endl;
+                    cout << "----------------------\n";
+                }
+                return;
+            }
+        }
+
+        if (!userFound) {
+            throw runtime_error("User not found!");
+        }
+    }
+
+   
+
+
 };
